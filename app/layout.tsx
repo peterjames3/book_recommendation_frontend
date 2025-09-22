@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-import "../globals.css";
+import "./globals.css";
 import Navbar from "@/app/ui/components/navigation/Navbar";
-import Footer from "./ui/components/footer/Footer";
+import Footer from "./ui/components/footer/footer";
 import ScrollToTopBtn from "./ui/scroll-to-top-btn";
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -15,46 +15,46 @@ const geistMono = Geist_Mono({
 });
 export const metadata: Metadata = {
   title: {
-    default: "Testhelpnow | Academic Tutoring, Test prep & End-To-End Exam Support Services",
-    template: "%s | Testhelpnow",
+    default: "litKenya| Personalized Book Discovery",
+    template: "%s | litKenya",
   },
   description:
-    "Testhelpnow is your trusted partner in academic success. We provide personalized tutoring, structured exam preparation, and full end-to-end support for students in the US, UK, Canada, and New Zealand.",
-  keywords: [
-    "online exam assistance",
-    "test preparation services",
-    "professional exam takers",
-    "exam support services",
-    "guaranteed exam success",
-    "hire someone to take my exam",
-    "do my exam for me",
-    "take my online test",
-    "academic exam help",
-    "exam help for students",
-    "remote test assistance",
-    "exam solutions online",
-    "university exam support",
-    "college test prep help",
-    "exam coaching services",
-    "certification exam help",
-    "proctored exam assistance",
-    "exam completion services",
-    "online class and exam help",
-    "exam takers for hire",
+    "litKenya helps you discover personalized book recommendations based on your reading preferences. Find your next favorite book with our AI-powered recommendation engine and community reviews..",
+   keywords: [
+    "book recommendations",
+    "reading suggestions",
+    "book discovery",
+    "personalized reading",
+    "book community",
+    "what to read next",
+    "book finder",
+    "reading app",
+    "book suggestions",
+    "literary recommendations",
+    "book matching",
+    "reading preferences",
+    "book catalog",
+    "reader community",
+    "book reviews",
+    "reading lists",
+    "book genres",
+    "new book discoveries",
+    "reading algorithm",
+    "book lover app",
   ],
 
   robots: "index, follow",
   openGraph: {
     title:{
-      default: "Testhelpnow | Academic Tutoring, Test prep & End-To-End Exam Support Services",
-      template: "%s | Testhelpnow",
+      default: "litKenya | Discover Your Next Favorite Read",
+      template: "%s | litKenya",
     } ,
     description:
-      "Get expert tutoring, targeted exam preparation, and end-to-end academic support. Edusion helps students in the US, UK, Canada, and New Zealand excel in their studies and exams.",
-    url: "https://testhelpnow.com/",
+      "Find your perfect next book with BookWise's intelligent recommendation system. Get personalized suggestions based on your favorite genres, authors, and reading history.",
+    url: "https://litKenya.com/",
     type: "website",
     locale: "en_US",
-    siteName: "Testhelpnow",
+    siteName: "litKenya",
   },
   icons: {
     icon: [
@@ -93,10 +93,10 @@ export default function RootLayout({
           className={`${geistSans.variable} ${geistMono.variable} antialiased bg-background`}
         >
          
-          <Navbar />
+         <Navbar />
           {children}
-          <ScrollToTopBtn />
-          <Footer />
+           <ScrollToTopBtn />
+           <Footer /> 
           
         </body>
       
