@@ -8,6 +8,9 @@ importers:
 
   .:
     dependencies:
+      '@emailjs/browser':
+        specifier: ^4.4.1
+        version: 4.4.1
       '@headlessui/react':
         specifier: ^2.2.8
         version: 2.2.8(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
@@ -20,6 +23,9 @@ importers:
       js-cookie:
         specifier: ^3.0.5
         version: 3.0.5
+      lucide-react:
+        specifier: ^0.544.0
+        version: 0.544.0(react@19.1.0)
       motion:
         specifier: ^12.23.16
         version: 12.23.16(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
@@ -38,6 +44,9 @@ importers:
       react-intersection-observer:
         specifier: ^9.16.0
         version: 9.16.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+      react-toastify:
+        specifier: ^11.0.5
+        version: 11.0.5(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       zustand:
         specifier: ^5.0.8
         version: 5.0.8(@types/react@19.1.13)(react@19.1.0)(use-sync-external-store@1.5.0(react@19.1.0))
@@ -75,6 +84,10 @@ packages:
   '@alloc/quick-lru@5.2.0':
     resolution: {integrity: sha512-UrcABB+4bUrFABwbluTIBErXwvbsU/V7TZWfmbgJfbkwiBuziS9gxdODUyuiecfdGQ85jglMW6juS3+z5TsKLw==}
     engines: {node: '>=10'}
+
+  '@emailjs/browser@4.4.1':
+    resolution: {integrity: sha512-DGSlP9sPvyFba3to2A50kDtZ+pXVp/0rhmqs2LmbMS3I5J8FSOgLwzY2Xb4qfKlOVHh29EAutLYwe5yuEZmEFg==}
+    engines: {node: '>=14.0.0'}
 
   '@emnapi/core@1.5.0':
     resolution: {integrity: sha512-sbP8GzB1WDzacS8fgNPpHlp6C9VZe+SJP3F90W9rLemaQj2PzIuTEl1qDOYQf58YIpyjViI24y9aPWCjEzY2cg==}
@@ -1493,6 +1506,11 @@ packages:
     resolution: {integrity: sha512-lyuxPGr/Wfhrlem2CL/UcnUc1zcqKAImBDzukY7Y5F/yQiNdko6+fRLevlw1HgMySw7f611UIY408EtxRSoK3Q==}
     hasBin: true
 
+  lucide-react@0.544.0:
+    resolution: {integrity: sha512-t5tS44bqd825zAW45UQxpG2CvcC4urOwn2TrwSH8u+MjeE+1NnWl6QqeQ/6NdjMqdOygyiT9p3Ev0p1NJykxjw==}
+    peerDependencies:
+      react: ^16.5.1 || ^17.0.0 || ^18.0.0 || ^19.0.0
+
   magic-string@0.30.19:
     resolution: {integrity: sha512-2N21sPY9Ws53PZvsEpVtNuSW+ScYbQdp4b9qUaL+9QkHUrGFKo56Lg9Emg5s9V/qrtNBmiR01sYhUOwu3H+VOw==}
 
@@ -1714,6 +1732,12 @@ packages:
 
   react-is@16.13.1:
     resolution: {integrity: sha512-24e6ynE2H+OKt4kqsOvNd8kBpV65zoxbA4BVsEOB3ARVWQki/DHzaUoC5KuON/BiccDaCCTZBuOcfZs70kR8bQ==}
+
+  react-toastify@11.0.5:
+    resolution: {integrity: sha512-EpqHBGvnSTtHYhCPLxML05NLY2ZX0JURbAdNYa6BUkk+amz4wbKBQvoKQAB0ardvSarUBuY4Q4s1sluAzZwkmA==}
+    peerDependencies:
+      react: ^18 || ^19
+      react-dom: ^18 || ^19
 
   react@19.1.0:
     resolution: {integrity: sha512-FS+XFBNvn3GTAWq26joslQgWNoFu08F4kl0J4CgdNKADkdSGXQyTCnKteIAJy96Br6YbpEU1LSzV5dYtjMkMDg==}
@@ -2011,6 +2035,8 @@ packages:
 snapshots:
 
   '@alloc/quick-lru@5.2.0': {}
+
+  '@emailjs/browser@4.4.1': {}
 
   '@emnapi/core@1.5.0':
     dependencies:
@@ -3542,6 +3568,10 @@ snapshots:
     dependencies:
       js-tokens: 4.0.0
 
+  lucide-react@0.544.0(react@19.1.0):
+    dependencies:
+      react: 19.1.0
+
   magic-string@0.30.19:
     dependencies:
       '@jridgewell/sourcemap-codec': 1.5.5
@@ -3746,6 +3776,12 @@ snapshots:
       react-dom: 19.1.0(react@19.1.0)
 
   react-is@16.13.1: {}
+
+  react-toastify@11.0.5(react-dom@19.1.0(react@19.1.0))(react@19.1.0):
+    dependencies:
+      clsx: 2.1.1
+      react: 19.1.0
+      react-dom: 19.1.0(react@19.1.0)
 
   react@19.1.0: {}
 
