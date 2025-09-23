@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Pompiere&display=swap');
 @import "tailwindcss";
 :root {
   --breakpoint-xs: 30rem;
@@ -31,6 +32,11 @@
   --text-label-md: 0.75rem;
   --text-label-sm: 0.6875rem;
 }
+.pompiere-regular {
+  font-family: "Pompiere", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+}
 
 @theme inline {
   --color-background: var(--background);
@@ -47,6 +53,7 @@
   --color-accent2:#E5E3A3;
   --color-accent3: #F0F2F1;
   --color-cardBg:#D6CF6E;
+  --color-normalText: #352513;
   --color-text:#061A26;
   --color-foreground:#352513;
 
@@ -78,6 +85,28 @@
 }
 html {
  scroll-behavior:smooth;
+}
+
+.btn {
+  @apply px-6 py-2 rounded-lg font-medium text-sm transition-colors border border-text;
+  background-color: var(--color-button-default);
+  color: var(--color-button-textColor);
+}
+
+.btn:hover {
+  background-color: var(--color-button-hover);
+  color: var(--color-button-textColor-hover);
+}
+
+.btn:active {
+  background-color: var(--color-button-active);
+}
+
+.btn:disabled {
+  background-color: var(--color-button-login-disabled);
+  color: var(--color-button-textColor-disabled);
+  opacity: 0.7;
+  cursor: not-allowed;
 }
 .card-btn {
   padding-left: 1.5rem; /* px-6 */

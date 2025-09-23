@@ -56,8 +56,8 @@ export default function Navbar() {
                     <ul key={index} className=''>
                          <Link
                   href={item.href}
-                  className={`hover:text-secondary transition-colors  ${
-                    pathname === item.href ? "text-accent font-semibold" : "text-primary "
+                  className={`hover:text-cardBg transition-colors  ${
+                    pathname === item.href ? "text-text font-semibold" : "text-primary "
                   }`}
                 >
                   {item.name}
