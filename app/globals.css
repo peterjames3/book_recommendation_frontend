@@ -4,6 +4,35 @@
   --breakpoint-2xl: 100rem;
   --breakpoint-3xl: 120px;
 
+  /* Font sizes */
+  --text-display: 2.25rem;
+  --text-headline: 1.5rem;
+  --text-title: 0.875rem;
+  --text-p: 0.75rem;
+
+  /* Responsive font sizes */
+  --text-display-sm: 2.4125rem;
+  --text-display-md: 2.7875rem;
+  --text-display-lg: 2.8625rem;
+
+  --text-headline-sm: 1.65rem;
+  --text-headline-md: 1.775rem;
+  --text-headline-lg: 1.8rem;
+
+  --text-title-sm: 1rem;
+  --text-title-md: 1.1875rem;
+  --text-title-lg: 1.375rem;
+
+  --text-p-sm: 0.875rem;
+  --text-p-md: 0.9375rem;
+  --text-p-lg: 1rem;
+
+  --text-label-lg: 0.875rem;
+  --text-label-md: 0.75rem;
+  --text-label-sm: 0.6875rem;
+}
+
+@theme inline {
   --color-background: var(--background);
   /* Font family */
   --font-poppins: Poppins, sans-serif;
@@ -46,34 +75,7 @@
   --color-status-cancelled: #b26623;
   --color-status-failed: #4eb959;
 
-  /* Font sizes */
-  --text-display: 2.25rem;
-  --text-headline: 1.5rem;
-  --text-title: 0.875rem;
-  --text-p: 0.75rem;
-
-  /* Responsive font sizes */
-  --text-display-sm: 2.4125rem;
-  --text-display-md: 2.7875rem;
-  --text-display-lg: 2.8625rem;
-
-  --text-headline-sm: 1.65rem;
-  --text-headline-md: 1.775rem;
-  --text-headline-lg: 1.8rem;
-
-  --text-title-sm: 1rem;
-  --text-title-md: 1.1875rem;
-  --text-title-lg: 1.375rem;
-
-  --text-p-sm: 0.875rem;
-  --text-p-md: 0.9375rem;
-  --text-p-lg: 1rem;
-
-  --text-label-lg: 0.875rem;
-  --text-label-md: 0.75rem;
-  --text-label-sm: 0.6875rem;
 }
-
 html {
  scroll-behavior:smooth;
 }

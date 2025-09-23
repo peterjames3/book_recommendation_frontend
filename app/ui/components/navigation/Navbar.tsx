@@ -1,13 +1,15 @@
 "use client";
 import { useState, useEffect } from "react";
-//import { usePathname } from "next/navigation";
+import { usePathname } from "next/navigation";
+
 
 import Link from "next/link";
 import Image from "next/image";
 import Mobile from "@/app/ui/components/navigation/Mobile";
+import  { MenuItems } from "@/lib/menuItems";
 
 export default function Navbar() {
- // const pathname = usePathname();
+  const pathname = usePathname();
   const [isScrolled, setIsScrolled] = useState(false);
   //const [activeMenu, setActiveMenu] = useState<string | null>(null);
 
@@ -21,10 +23,10 @@ export default function Navbar() {
 
   return (
     <header
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 py-6 ${
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 py-7 ${
         isScrolled
-          ? "bg-gradient-to-r from-white/90 via-green-50/80 to-white/90 backdrop-blur-lg shadow-xl border-b border-white/20"
-          : "bg-gradient-to-r from-[#CEF3D6] to-[#FFEEEB]"
+          ? "bg-gradient-to-r from-white/90 via-orange-50/80 to-white/90 backdrop-blur-lg shadow-xl border-b border-white/20"
+          : "bg-gradient-to-r from-[#E5E3A3] to-[#FFEEEB]"
       }`}
     >
     
@@ -41,19 +43,57 @@ export default function Navbar() {
               className="object-contain"
             />
             <span>
-              <span className="text-foreground">TestHelp</span>
-              <span className="text-primary">Now</span>.
+              <span className="text-foreground">lit</span>
+              <span className="text-primary">Kenya</span>.
             </span>
           </Link>
         </nav>
 
         {/* Desktop Navigation */}
-        <div className="hidden lg:flex">
+        <div className="hidden lg:flex lg:gap-5 text-normal">
+            {
+                MenuItems.map((item, index) => (
+                    <ul key={index} className=''>
+                         <Link
+                  href={item.href}
+                  className={`hover:text-secondary transition-colors  ${
+                    pathname === item.href ? "text-accent font-semibold" : "text-primary "
+                  }`}
+                >
+                  {item.name}
+                
+                </Link>
+                
+
+                    </ul>    
+                ))
+            }
+           
          
         </div>
         {/*  Buttons */}
         <div className="lg:flex  hidden gap-5">
-         
+           <button
+            id="get-help-now-btn"
+            // onClick={() => dispatch({ type: "SHOW_HELP" })}
+            type="button"
+            className="btn hover:cursor-pointer"
+            aria-label='Get help now'
+            aria-pressed='false'
+          >
+            Login
+          </button>
+             <button
+            id="get-help-now-btn"
+            // onClick={() => dispatch({ type: "SHOW_HELP" })}
+            type="button"
+            className="btn hover:cursor-pointer"
+            aria-label='Get help now'
+            aria-pressed='false'
+          >
+            Register
+          </button>
+
         </div>
 
         {/* Mobile Menu Button */}
