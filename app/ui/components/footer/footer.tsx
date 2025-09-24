@@ -28,32 +28,31 @@ export default function Footer() {
                 priority
                 className="object-contain"
               />
-              <span className="font-semibold">
-                <span className="text-foreground">TestHelp</span>
-                <span className="text-gray-400">Now</span>.
+              <span className="font-semibold title">
+                <span className="text-primary pompiere-regular ">Lit</span>
+                <span className="text-primary">Kenya</span>.
               </span>
             </Link>
           </div>
 
           <p className="p-text text-gray-300">
-            Your trusted partner for academic success. We help students excel in
-            their exams and classes with personalized support.
+            Smart Picks for Every Book Enthusiasts.
           </p>
         </div>
 
         {/* Solutions */}
         <div>
-          <h3 className="mb-4 text-xl font-semibold">Solutions</h3>
+          <h3 className="mb-4 text-xl font-semibold">Company</h3>
           <ul className="space-y-2 text-[1rem] text-gray-300">
             <li>
-              <Link href="/exam-aid">➜ Proctored Exam support</Link>
+              <Link href="/">➜ Home</Link>
             </li>
             <li>
-              <Link href="/test-prep">➜ Test Prep </Link>
+              <Link href="/help">➜ Help </Link>
             </li>
             <li>
-              <Link href="/academic/tutoring">
-                ➜ One-on-One Online Tutoring
+              <Link href="/explore">
+                ➜ Explore
               </Link>
             </li>
           </ul>
@@ -61,7 +60,7 @@ export default function Footer() {
 
         {/* Company */}
         <div>
-          <h3 className="mb-4 text-xl font-semibold">Company</h3>
+          <h3 className="mb-4 text-xl font-semibold">Support</h3>
           <ul className="space-y-2 text-[1rem] text-gray-300">
             <li>
               <Link href="/faq">➜ FAQs</Link>
@@ -69,9 +68,7 @@ export default function Footer() {
             <li>
               <Link href="/how-it-works">➜ How It Works</Link>
             </li>
-            <li>
-              <Link href="/blog">➜ Blog</Link>
-            </li>
+        
             <li>
               <Link href="/contact">➜ Contact</Link>
             </li>
@@ -93,7 +90,7 @@ export default function Footer() {
           </div>
           <div className="flex items-center gap-3 text-[1rem] text-gray-300">
             <Mail size={20} />
-            <Link href="mailto:info@testhelpnow.com">info@testhelpnow.com</Link>
+            <Link href="mailto:info@testhelpnow.com">info@litkenya.com</Link>
           </div>
           <div className="flex items-center gap-3 text-[1rem] text-gray-300">
             <Phone size={20} />
@@ -111,9 +108,9 @@ export default function Footer() {
 
       {/* Copyright */}
       <div className="pt-4 text-center text-sm text-gray-400">
-        © {new Date().getFullYear()} Edusion. All rights reserved. <br />
+        © {new Date().getFullYear()} litKenya. All rights reserved. <br />
         Designed & built with ❤️ by{" "}
-        <span className="font-semibold text-white">KItechCreatives</span>
+        <span className="font-semibold text-white">KItechCreative</span>
       </div>
     </motion.footer>
   );

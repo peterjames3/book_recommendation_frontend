@@ -98,8 +98,8 @@ export default function NewsletterForm() {
             type="submit"
             disabled={isSubmitting}
             value="Subscribe"
-            className={`text-background w-full cursor-pointer rounded-md px-6 py-[13px] font-medium transition-all delay-300 ${
-              isSubmitting ? "bg-foreground" : "btn hover:cursor-pointer"
+            className={`text-secondary w-full cursor-pointer rounded-md px-6 py-[13px] font-medium transition-all delay-300 ${
+              isSubmitting ? "bg-secondary" : "btn hover:cursor-pointer"
             } hover:bg-secondary`}
           >
             {isSubmitting ? "Subscribing..." : "Subscribe"}
