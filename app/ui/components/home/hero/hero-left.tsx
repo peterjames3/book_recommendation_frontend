@@ -33,10 +33,10 @@ const LeftHero = () => {
 
                     <div>
                   
-                    <Link className="btn hover:cursor-pointer flex items-center justify-center w-1/3 gap-2" href='/explore'> 
+                    <Link className="btn hover:cursor-pointer flex flex-nowrap items-center justify-center w-1/3 gap-2" href='/explore'> 
                     <button
                     id="get-help-now-btn"
-                
+                    className='flex flex-nowrap'
                     type="button"
                     
                     aria-label='Get started'
