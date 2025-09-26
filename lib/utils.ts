@@ -100,7 +100,7 @@ export function generateRandomColor(): string {
   return colors[Math.floor(Math.random() * colors.length)];
 }
 
-export function debounce<T extends (...args: any[]) => any>(
+export function debounce<T extends (...args: unknown[]) => unknown>(
   func: T,
   wait: number
 ): (...args: Parameters<T>) => void {
@@ -111,7 +111,7 @@ export function debounce<T extends (...args: any[]) => any>(
   };
 }
 
-export function throttle<T extends (...args: any[]) => any>(
+export function throttle<T extends (...args: unknown[]) => unknown>(
   func: T,
   limit: number
 ): (...args: Parameters<T>) => void {
@@ -230,10 +230,10 @@ export function shareUrl(url: string, title?: string): void {
   }
 }
 
-export function getErrorMessage(error: any): string {
+export function getErrorMessage(error: unknown): string {
   if (typeof error === 'string') return error;
-  if (error?.message) return error.message;
-  if (error?.response?.data?.message) return error.response.data.message;
+  if (error && typeof error === 'object' && 'message' in error) return (error as { message: string }).message;
+  if (error && typeof error === 'object' && 'response' in error && error.response && typeof error.response === 'object' && 'data' in error.response && error.response.data && typeof error.response.data === 'object' && 'message' in error.response.data) return (error.response.data as { message: string }).message;
   return 'An unexpected error occurred';
 }
 
@@ -254,7 +254,7 @@ export function shuffleArray<T>(array: T[]): T[] {
   return shuffled;
 }
 
-export function groupBy<T, K extends keyof any>(
+export function groupBy<T, K extends PropertyKey>(
   array: T[],
   key: (item: T) => K
 ): Record<K, T[]> {

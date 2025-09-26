@@ -98,9 +98,9 @@ export default function NewsletterForm() {
             type="submit"
             disabled={isSubmitting}
             value="Subscribe"
-            className={`text-secondary w-full cursor-pointer rounded-md px-6 py-[13px] font-medium transition-all delay-300 ${
-              isSubmitting ? "bg-secondary" : "btn hover:cursor-pointer"
-            } hover:bg-secondary`}
+            className={` w-full cursor-pointer rounded-md px-6 py-[13px] font-medium transition-all delay-300 ${
+              isSubmitting ?"bg-button-disabled text-button-textColor-disabled" : ""
+            } hover:bg-button-hover hover:border-button-hover border border-primary bg-primary`}
           >
             {isSubmitting ? "Subscribing..." : "Subscribe"}
           </button>

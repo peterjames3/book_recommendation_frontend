@@ -3,6 +3,7 @@ import AboutLitKenya from '@/app/ui/components/home/about/about-litkenya'
 import Discover from '@/app/ui/components/home/discover/discover';
 import MoodMain from './ui/components/home/mood/mood-main';
 import SuccessPath from './ui/components/home/path/success-path';
+import Testimonials from './ui/components/home/Testimonial/testimonial-section';
 
 export default function Home() {
   return (
@@ -12,6 +13,7 @@ export default function Home() {
     <Discover />
     <MoodMain />
     <SuccessPath />
+    <Testimonials />
    </main>
   );
 }
