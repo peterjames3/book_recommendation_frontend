@@ -3,7 +3,7 @@ import { toast } from 'react-hot-toast';
 import Cookies from 'js-cookie';
 
 // Types
-export interface ApiResponse<T = any> {
+export interface ApiResponse<T = unknown> {
   success: boolean;
   data?: T;
   message?: string;
@@ -84,7 +84,7 @@ export const authApi = {
     return response.data;
   },
   
-  updatePreferences: async (preferences: any) => {
+  updatePreferences: async (preferences: Record<string, unknown>) => {
     const response = await api.put<ApiResponse>('/auth/preferences', preferences);
     return response.data;
   },
@@ -157,7 +157,7 @@ export const searchApi = {
     return response.data;
   },
   
-  advancedSearch: async (filters: any) => {
+  advancedSearch: async (filters: Record<string, unknown>) => {
     const response = await api.post<ApiResponse>('/search/advanced', filters);
     return response.data;
   },
@@ -291,7 +291,7 @@ export const ordersApi = {
     return response.data;
   },
   
-  reorder: async (orderId: string, orderData: any) => {
+  reorder: async (orderId: string, orderData: Record<string, unknown>) => {
     const response = await api.post<ApiResponse>(`/orders/${orderId}/reorder`, orderData);
     return response.data;
   },
