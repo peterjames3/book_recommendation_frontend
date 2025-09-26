@@ -1,6 +1,7 @@
 import axios, { AxiosInstance, AxiosResponse } from 'axios';
 import { toast } from 'react-hot-toast';
 import Cookies from 'js-cookie';
+import { Book } from '@/context/books-store';
 
 // Types
 export interface ApiResponse<T = unknown> {
@@ -195,7 +196,7 @@ export const recommendationsApi = {
   },
   
   getByGenre: async (genre: string, params?: { limit?: number; excludeBookIds?: string[] }) => {
-    const response = await api.get<ApiResponse>(`/recommendations/by-genre/${genre}`, {
+    const response = await api.get<ApiResponse<{ books: Book[] }>>(`/recommendations/by-genre/${genre}`, {
       params,
     });
     return response.data;

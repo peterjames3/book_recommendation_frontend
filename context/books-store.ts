@@ -1,6 +1,11 @@
 import { create } from 'zustand';
 import { booksApi, searchApi, recommendationsApi } from '@/lib/api';
+import { AxiosError } from 'axios';
 import { toast } from 'react-hot-toast';
+interface ErrorResponse {
+  message?: string;
+  [key: string]: unknown;
+}
 
 export interface Book {
   id: string;
@@ -52,6 +57,24 @@ export interface Recommendation {
   reason: string;
 }
 
+interface BooksResponse {
+  books: Book[];
+  pagination: {
+    totalItems: number;
+    currentPage: number;
+    itemsPerPage: number;
+    hasMore: boolean;
+  };
+}
+
+interface BookResponse {
+  book: Book;
+}
+
+interface SimilarBooksResponse {
+  similarBooks: Book[];
+}
+
 interface BooksState {
   // Books data
   books: Book[];
@@ -67,7 +90,7 @@ interface BooksState {
   // Recommendations
   personalizedRecommendations: Recommendation[];
   trendingBooks: Book[];
-  staffPicks: any[];
+  staffPicks: Book[];
   
   // Metadata
   genres: string[];
@@ -85,23 +108,23 @@ interface BooksState {
 
 interface BooksActions {
   // Books actions
-  loadBooks: (params?: any) => Promise<void>;
+  loadBooks: (params?: Record<string, unknown>) => Promise<void>;
   loadFeaturedBooks: (limit?: number) => Promise<void>;
   loadNewReleases: (limit?: number) => Promise<void>;
   loadBook: (id: string) => Promise<void>;
-  loadBooksByGenre: (genre: string, params?: any) => Promise<void>;
+  loadBooksByGenre: (genre: string, params?: Record<string, unknown>) => Promise<void>;
   
   // Search actions
-  searchBooks: (query: string, params?: any) => Promise<void>;
+  searchBooks: (query: string, params?: Record<string, unknown>) => Promise<void>;
   advancedSearch: (filters: SearchFilters) => Promise<void>;
-  searchExternal: (query: string, params?: any) => Promise<void>;
+  searchExternal: (query: string, params?: Record<string, unknown>) => Promise<void>;
   clearSearch: () => void;
   setSearchFilters: (filters: Partial<SearchFilters>) => void;
   
   // Recommendations actions
   loadPersonalizedRecommendations: (limit?: number) => Promise<void>;
   loadSimilarBooks: (bookId: string, limit?: number) => Promise<Book[]>;
-  loadTrendingBooks: (params?: any) => Promise<void>;
+  loadTrendingBooks: (params?: Record<string, unknown>) => Promise<void>;
   loadStaffPicks: (limit?: number) => Promise<void>;
   
   // Metadata actions
@@ -116,7 +139,7 @@ interface BooksActions {
 
 type BooksStore = BooksState & BooksActions;
 
-export const useBooksStore = create<BooksStore>()((set, get) => ({
+export const useBooksStore = create<BooksStore>()((set) => ({
   // Initial state
   books: [],
   featuredBooks: [],
@@ -140,20 +163,21 @@ export const useBooksStore = create<BooksStore>()((set, get) => ({
   loadBooks: async (params = {}) => {
     try {
       set({ isLoading: true, error: null });
-      
+
       const response = await booksApi.getBooks(params);
-      
+
       if (response.success && response.data) {
+        const data = response.data as BooksResponse;
         set({
-          books: response.data.books,
+          books: data.books,
           isLoading: false,
           error: null,
         });
       } else {
         throw new Error(response.message || 'Failed to load books');
       }
-    } catch (error: any) {
-      const errorMessage = error.response?.data?.message || error.message || 'Failed to load books';
+    } catch (error: unknown) {
+      const errorMessage = ((error as AxiosError).response?.data as ErrorResponse)?.message || (error as AxiosError).message || 'Failed to load books';
       set({
         isLoading: false,
         error: errorMessage,
@@ -165,14 +189,14 @@ export const useBooksStore = create<BooksStore>()((set, get) => ({
   loadFeaturedBooks: async (limit = 12) => {
     try {
       const response = await booksApi.getFeaturedBooks(limit);
-      
+
       if (response.success && response.data) {
         set({
-          featuredBooks: response.data,
+          featuredBooks: response.data as Book[],
           error: null,
         });
       }
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('Failed to load featured books:', error);
     }
   },
@@ -180,14 +204,14 @@ export const useBooksStore = create<BooksStore>()((set, get) => ({
   loadNewReleases: async (limit = 12) => {
     try {
       const response = await booksApi.getNewReleases(limit);
-      
+
       if (response.success && response.data) {
         set({
-          newReleases: response.data,
+          newReleases: response.data as Book[],
           error: null,
         });
       }
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('Failed to load new releases:', error);
     }
   },
@@ -195,20 +219,21 @@ export const useBooksStore = create<BooksStore>()((set, get) => ({
   loadBook: async (id: string) => {
     try {
       set({ isLoading: true, error: null });
-      
+
       const response = await booksApi.getBook(id);
-      
+
       if (response.success && response.data) {
+        const data = response.data as BookResponse;
         set({
-          currentBook: response.data.book,
+          currentBook: data.book,
           isLoading: false,
           error: null,
         });
       } else {
         throw new Error(response.message || 'Failed to load book');
       }
-    } catch (error: any) {
-      const errorMessage = error.response?.data?.message || error.message || 'Failed to load book';
+    } catch (error: unknown) {
+      const errorMessage = ((error as AxiosError).response?.data as ErrorResponse)?.message || (error as AxiosError).message || 'Failed to load book';
       set({
         isLoading: false,
         error: errorMessage,
@@ -221,20 +246,21 @@ export const useBooksStore = create<BooksStore>()((set, get) => ({
   loadBooksByGenre: async (genre: string, params = {}) => {
     try {
       set({ isLoading: true, error: null });
-      
+
       const response = await booksApi.getBooksByGenre(genre, params);
-      
+
       if (response.success && response.data) {
+        const data = response.data as BooksResponse;
         set({
-          books: response.data.books,
+          books: data.books,
           isLoading: false,
           error: null,
         });
       } else {
         throw new Error(response.message || 'Failed to load books by genre');
       }
-    } catch (error: any) {
-      const errorMessage = error.response?.data?.message || error.message || 'Failed to load books by genre';
+    } catch (error: unknown) {
+      const errorMessage = ((error as AxiosError).response?.data as ErrorResponse)?.message || (error as AxiosError).message || 'Failed to load books by genre';
       set({
         isLoading: false,
         error: errorMessage,
@@ -247,17 +273,18 @@ export const useBooksStore = create<BooksStore>()((set, get) => ({
   searchBooks: async (query: string, params = {}) => {
     try {
       set({ isSearching: true, searchError: null, searchQuery: query });
-      
+
       const response = await searchApi.naturalLanguageSearch(query, params);
-      
+
       if (response.success && response.data) {
+        const data = response.data as BooksResponse;
         set({
           searchResults: {
-            books: response.data.books,
-            totalCount: response.data.pagination.totalItems,
-            page: response.data.pagination.currentPage,
-            limit: response.data.pagination.itemsPerPage,
-            hasMore: response.data.pagination.hasMore,
+            books: data.books,
+            totalCount: data.pagination.totalItems,
+            page: data.pagination.currentPage,
+            limit: data.pagination.itemsPerPage,
+            hasMore: data.pagination.hasMore,
           },
           isSearching: false,
           searchError: null,
@@ -265,8 +292,8 @@ export const useBooksStore = create<BooksStore>()((set, get) => ({
       } else {
         throw new Error(response.message || 'Search failed');
       }
-    } catch (error: any) {
-      const errorMessage = error.response?.data?.message || error.message || 'Search failed';
+    } catch (error: unknown) {
+      const errorMessage = ((error as AxiosError).response?.data as ErrorResponse)?.message || (error as AxiosError).message || 'Search failed';
       set({
         isSearching: false,
         searchError: errorMessage,
@@ -279,17 +306,18 @@ export const useBooksStore = create<BooksStore>()((set, get) => ({
   advancedSearch: async (filters: SearchFilters) => {
     try {
       set({ isSearching: true, searchError: null, searchFilters: filters });
-      
-      const response = await searchApi.advancedSearch(filters);
-      
+
+      const response = await searchApi.advancedSearch(filters as Record<string, unknown>);
+
       if (response.success && response.data) {
+        const data = response.data as BooksResponse;
         set({
           searchResults: {
-            books: response.data.books,
-            totalCount: response.data.pagination.totalItems,
-            page: response.data.pagination.currentPage,
-            limit: response.data.pagination.itemsPerPage,
-            hasMore: response.data.pagination.hasMore,
+            books: data.books,
+            totalCount: data.pagination.totalItems,
+            page: data.pagination.currentPage,
+            limit: data.pagination.itemsPerPage,
+            hasMore: data.pagination.hasMore,
           },
           isSearching: false,
           searchError: null,
@@ -297,8 +325,8 @@ export const useBooksStore = create<BooksStore>()((set, get) => ({
       } else {
         throw new Error(response.message || 'Advanced search failed');
       }
-    } catch (error: any) {
-      const errorMessage = error.response?.data?.message || error.message || 'Advanced search failed';
+    } catch (error: unknown) {
+      const errorMessage = ((error as AxiosError).response?.data as ErrorResponse)?.message || (error as AxiosError).message || 'Advanced search failed';
       set({
         isSearching: false,
         searchError: errorMessage,
@@ -311,17 +339,18 @@ export const useBooksStore = create<BooksStore>()((set, get) => ({
   searchExternal: async (query: string, params = {}) => {
     try {
       set({ isSearching: true, searchError: null });
-      
+
       const response = await searchApi.searchExternal(query, params);
-      
+
       if (response.success && response.data) {
+        const data = response.data as BooksResponse;
         set({
           searchResults: {
-            books: response.data.books,
-            totalCount: response.data.pagination.totalItems,
-            page: response.data.pagination.currentPage,
-            limit: response.data.pagination.itemsPerPage,
-            hasMore: response.data.pagination.hasMore,
+            books: data.books,
+            totalCount: data.pagination.totalItems,
+            page: data.pagination.currentPage,
+            limit: data.pagination.itemsPerPage,
+            hasMore: data.pagination.hasMore,
           },
           isSearching: false,
           searchError: null,
@@ -329,8 +358,8 @@ export const useBooksStore = create<BooksStore>()((set, get) => ({
       } else {
         throw new Error(response.message || 'External search failed');
       }
-    } catch (error: any) {
-      const errorMessage = error.response?.data?.message || error.message || 'External search failed';
+    } catch (error: unknown) {
+      const errorMessage = ((error as AxiosError).response?.data as ErrorResponse)?.message || (error as AxiosError).message || 'External search failed';
       set({
         isSearching: false,
         searchError: errorMessage,
@@ -359,16 +388,16 @@ export const useBooksStore = create<BooksStore>()((set, get) => ({
   loadPersonalizedRecommendations: async (limit = 10) => {
     try {
       set({ isLoadingRecommendations: true });
-      
+
       const response = await recommendationsApi.getPersonalized(limit);
-      
+
       if (response.success && response.data) {
         set({
-          personalizedRecommendations: response.data,
+          personalizedRecommendations: response.data as Recommendation[],
           isLoadingRecommendations: false,
         });
       }
-    } catch (error: any) {
+    } catch (error: unknown) {
       set({ isLoadingRecommendations: false });
       // Silently fail for recommendations - not critical
       console.error('Failed to load personalized recommendations:', error);
@@ -378,12 +407,12 @@ export const useBooksStore = create<BooksStore>()((set, get) => ({
   loadSimilarBooks: async (bookId: string, limit = 5) => {
     try {
       const response = await recommendationsApi.getSimilar(bookId, limit);
-      
+
       if (response.success && response.data) {
-        return response.data.similarBooks;
+        return (response.data as SimilarBooksResponse).similarBooks;
       }
       return [];
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('Failed to load similar books:', error);
       return [];
     }
@@ -392,13 +421,13 @@ export const useBooksStore = create<BooksStore>()((set, get) => ({
   loadTrendingBooks: async (params = {}) => {
     try {
       const response = await recommendationsApi.getTrending(params);
-      
+
       if (response.success && response.data) {
         set({
-          trendingBooks: response.data.books,
+          trendingBooks: (response.data as { books: Book[] }).books,
         });
       }
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('Failed to load trending books:', error);
     }
   },
@@ -406,13 +435,13 @@ export const useBooksStore = create<BooksStore>()((set, get) => ({
   loadStaffPicks: async (limit = 8) => {
     try {
       const response = await recommendationsApi.getStaffPicks(limit);
-      
+
       if (response.success && response.data) {
         set({
-          staffPicks: response.data,
+          staffPicks: response.data as Book[],
         });
       }
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('Failed to load staff picks:', error);
     }
   },
@@ -421,13 +450,13 @@ export const useBooksStore = create<BooksStore>()((set, get) => ({
   loadGenres: async () => {
     try {
       const response = await booksApi.getGenres();
-      
+
       if (response.success && response.data) {
         set({
-          genres: response.data,
+          genres: response.data as string[],
         });
       }
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('Failed to load genres:', error);
     }
   },
@@ -435,13 +464,13 @@ export const useBooksStore = create<BooksStore>()((set, get) => ({
   loadAuthors: async () => {
     try {
       const response = await booksApi.getAuthors();
-      
+
       if (response.success && response.data) {
         set({
-          authors: response.data,
+          authors: response.data as string[],
         });
       }
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('Failed to load authors:', error);
     }
   },
