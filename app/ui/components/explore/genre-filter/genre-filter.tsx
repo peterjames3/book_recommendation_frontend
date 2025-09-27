@@ -1,6 +1,7 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 import { recommendationsApi } from "@/lib/api";
 import { Book } from "@/context/books-store";
 import { toast } from "react-hot-toast";
@@ -20,37 +21,37 @@ const GENRES = [
 ];
 
 export default function GenreFilter() {
-  const [loading, setLoading] = useState(false);
-  const [selectedGenre, setSelectedGenre] = useState<string>("Fiction"); // default Fiction
-  const [books, setBooks] = useState<Book[]>([]);
+  const [selectedGenre, setSelectedGenre] = useState<string>("Fiction");
 
-  const fetchBooks = async (genre: string) => {
-    setLoading(true);
-    try {
-      const response = await recommendationsApi.getByGenre(genre, { limit: 10 });
-      if (response.success && response.data?.books) {
-        setBooks(response.data.books as Book[]);
-      } else {
-        setBooks([]);
-        toast.error("No books found for this genre");
-      }
-    } catch (err) {
-      console.error(err);
-      toast.error("Failed to fetch books by genre");
-    } finally {
-      setLoading(false);
-    }
-  };
+  const {
+    data: apiResponse,
+    isLoading,
+    
+    isError,
+  } = useQuery({
+    queryKey: ['books-by-genre', selectedGenre],
+    queryFn: () => recommendationsApi.getByGenre(selectedGenre, { limit: 10 }),
+    staleTime: Infinity, // Prevents unnecessary refetches
+    gcTime: 24 * 60 * 60 * 1000, // Keep in cache for 24 hours
+  });
+
+  // Extract books from API response
+  const books = apiResponse?.success ? (apiResponse.data?.books as Book[]) : [];
 
   const handleGenreClick = (genre: string) => {
     setSelectedGenre(genre);
-    fetchBooks(genre);
+    // React Query will automatically fetch due to queryKey change
   };
 
-  // 🔹 Fetch Fiction books on first render
-  useEffect(() => {
-    fetchBooks("Fiction");
-  }, []);
+  // Show error toast if query fails
+  if (isError) {
+    toast.error("Failed to fetch books by genre");
+  }
+
+  // Show no books message if API returns empty
+  if (!isLoading && books.length === 0 && !isError) {
+    toast.error("No books found for this genre");
+  }
 
   return (
     <section className="mt-12 w-full bg-accent2">
@@ -64,7 +65,7 @@ export default function GenreFilter() {
               key={genre}
               genre={genre}
               isSelected={selectedGenre === genre}
-              loading={loading && selectedGenre === genre}
+              loading={isLoading && selectedGenre === genre}
               onClick={() => handleGenreClick(genre)}
             />
           ))}
@@ -72,7 +73,11 @@ export default function GenreFilter() {
 
         {/* Book grid */}
         {selectedGenre && (
-          <GenreBookGrid genre={selectedGenre} books={books} loading={loading} />
+          <GenreBookGrid 
+            genre={selectedGenre} 
+            books={books} 
+            loading={isLoading} 
+          />
         )}
       </div>
     </section>

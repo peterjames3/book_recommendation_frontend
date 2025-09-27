@@ -4,6 +4,7 @@ import "./globals.css";
 import Navbar from "@/app/ui/components/navigation/Navbar";
 import Footer from "./ui/components/footer/footer";
 import ScrollToTopBtn from "./ui/scroll-to-top-btn";
+import ReactQueryProvider from "@/provider/react-query-provider";
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -87,7 +88,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      
+      <ReactQueryProvider>
       
         <body
           className={`${geistSans.variable} ${geistMono.variable} antialiased bg-background`}
@@ -99,6 +100,7 @@ export default function RootLayout({
            <Footer /> 
           
         </body>
+        </ReactQueryProvider>
       
     </html>
   );
