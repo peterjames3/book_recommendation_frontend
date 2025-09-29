@@ -10,11 +10,7 @@ export default function BookCard({ book }: BookCardProps) {
         <article className=" flex flex-col items-start text-start cursor-pointer">
             <figure>
                 <Image
-                    src={
-                        book.imageUrl ||
-
-                        "/placeholder-book.png"
-                    }
+                    src={book.imageUrl}
                     width={280}
                     height={400}
                     alt={book.title}

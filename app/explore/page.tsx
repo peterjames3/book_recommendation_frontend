@@ -5,6 +5,7 @@ import MainHero from "@/app/ui/components/explore/hero-section/hero.main";
 import SearchResults from "@/app/ui/components/explore/search-results/search-results";
 import GenreFilter from '@/app/ui/components/explore/genre-filter/genre-filter';
 import { Book } from '../../context/books-store';
+import Arrivals from '@/app/ui/components/explore/new-arrivals/arrivals';
 export default function ExplorePage() {
     const [results, setResults] = useState<Book[]>([]);
     return(
@@ -17,6 +18,7 @@ export default function ExplorePage() {
         <SearchResults results={results} />
       </div>
       <GenreFilter />
+      <Arrivals />
      </>
     )
 }
