@@ -5,22 +5,11 @@ import { useQuery } from "@tanstack/react-query";
 import { recommendationsApi } from "@/lib/api";
 import { Book } from "@/context/books-store";
 import { toast } from "react-hot-toast";
-import GenreButton from "./genre-button";
-import GenreBookGrid from "./genre-book-grid";
+//import GenreButton from "./genre-button";
+import BookGrid from "./book-grid";
 
-const GENRES = [
-  "Fiction",
-  "Non-Fiction",
-  "Mystery",
-  "Romance",
-  "Sci-Fi",
-  "Fantasy",
-  "Thriller",
-  "Biography",
-  "History",
-];
-
-export default function GenreFilter() {
+export default function Arrivals
+() {
   const [selectedGenre, setSelectedGenre] = useState<string>("Fiction");
 
   const {
@@ -56,24 +45,13 @@ export default function GenreFilter() {
   return (
     <section className="mt-12 w-full bg-accent2">
       <div className="py-12 w-full mx-auto max-w-full lg:max-w-[1240px] xl:max-w-[1440px]">
-        <h2 className="headline font-semibold mb-4">Browse by Genre</h2>
+        <h2 className="headline font-semibold mb-4">New Arrivals</h2>
 
-        {/* Genre buttons */}
-        <div className="flex flex-wrap gap-3 mb-8">
-          {GENRES.map((genre) => (
-            <GenreButton
-              key={genre}
-              genre={genre}
-              isSelected={selectedGenre === genre}
-              loading={isLoading && selectedGenre === genre}
-              onClick={() => handleGenreClick(genre)}
-            />
-          ))}
-        </div>
+    
 
         {/* Book grid */}
         {selectedGenre && (
-          <GenreBookGrid 
+          <BookGrid 
             genre={selectedGenre} 
             books={books} 
             loading={isLoading} 

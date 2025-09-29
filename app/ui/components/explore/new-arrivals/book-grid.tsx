@@ -11,7 +11,7 @@ interface GenreBookGridProps {
   loading: boolean;
 }
 
-export default function GenreBookGrid({ genre, books, loading }: GenreBookGridProps) {
+export default function BookGrid({ genre, books, loading }: GenreBookGridProps) {
   const router = useRouter();
 
   if (loading) {
