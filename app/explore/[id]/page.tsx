@@ -5,7 +5,7 @@ import { Book } from "@/context/books-store";
 import { use } from 'react'
 import Image from "next/image";
 import Link from "next/link";
-import { MoveLeft } from 'lucide-react';
+import { MoveLeft, RefreshCw } from 'lucide-react';
 import Loading from '@/app/ui/loading'
 import RelatedBookSkeleton from "@/app/ui/components/skelton/relatedbook-skeleton";
 import { useRouter } from 'next/navigation'
@@ -24,6 +24,16 @@ export default function BookPage({ params }: { params: Promise<{ id: string }> }
     gcTime: 24 * 60 * 60 * 1000,
     retry: 2,
   });
+   // Fetch book description separately (useful if description was missing initially)
+  const { data: bookDescription, refetch: refetchDescription } = useQuery({
+    queryKey: ['book-description', id],
+    queryFn: async () => {
+      const response = await booksApi.getBookDescription(id);
+      return (response?.data as { description: string })?.description || "No description available";
+    },
+    enabled: false, // Don't fetch by default
+  });
+ 
 
   // Fetch related books (only when we have a book)
   const {
@@ -39,6 +49,11 @@ export default function BookPage({ params }: { params: Promise<{ id: string }> }
     enabled: !!book, // only fetch when main book is available
     staleTime: 1000 * 60 * 60, // 1 hour cache
   });
+
+  // Check if we need to fetch description
+  const needsDescription = book && (!book.description || book.description === 'No description available');
+  const displayDescription = bookDescription || book?.description || "No description available";
+
 
 
   if (isLoading) return <Loading />;
@@ -133,13 +148,22 @@ export default function BookPage({ params }: { params: Promise<{ id: string }> }
               </div>
             </article>
           </div>
-          <section className='mt-6'>
-            <h3 className=''>Summary</h3>
-            <p>
-              {book.description || "No Description Available for this book"}
+           <section className='mt-6'>
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-2xl font-bold">Summary</h3>
+              {needsDescription && (
+                <button
+                  onClick={() => refetchDescription()}
+                  className="flex items-center gap-2 px-3 py-1 text-sm bg-blue-100 text-blue-700 rounded hover:bg-blue-200 transition-colors"
+                >
+                  <RefreshCw className="h-4 w-4" />
+                  Fetch Description
+                </button>
+              )}
+            </div>
+            <p className="text-gray-700 leading-relaxed">
+              {displayDescription}
             </p>
-
-
           </section>
 
         </section>

@@ -146,6 +146,11 @@ export const booksApi = {
     const response = await api.get<ApiResponse>('/books/meta/authors');
     return response.data;
   },
+    // Get book description from Open Library
+  getBookDescription: async (id: string) => {
+    const response = await api.get<ApiResponse>(`/books/${id}/description`);
+    return response.data;
+  },
 };
 
 // Search API

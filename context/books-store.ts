@@ -268,6 +268,21 @@ export const useBooksStore = create<BooksStore>()((set) => ({
       toast.error(errorMessage);
     }
   },
+  // get book description
+  getBookDescription: async (id: string): Promise<string> => {
+  try {
+    const response = await booksApi.getBookDescription(id);
+    
+    if (response.success && response.data) {
+      const data = response.data as { description: string };
+      return data.description;
+    }
+    return "No description available";
+  } catch (error: unknown) {
+    console.error('Failed to fetch book description:', error);
+    return "No description available";
+  }
+},
 
   // Search actions
   searchBooks: async (query: string, params = {}) => {
