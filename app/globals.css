@@ -64,7 +64,7 @@
   --color-active-link: #4eb959;
   --color-default-link: #b3e7b3;
   --color-hover-link: #81d487;
-  --color-button-default: #2b9e3b;
+  --color-button-default: #BAA538;
   --color-button-hover: #6B5128;
   --color-button-active: #5C4527;
   --color-button-disabled: #F9F9ED;
@@ -135,16 +135,10 @@ html {
   opacity: 0.7;
   cursor: not-allowed;
 }
+
+
 .btn {
-  padding-left: 1.5rem; /* px-6 */
-  padding-right: 1.5rem; /* px-6 */
-  padding-top: 1rem; /* py-4 */
-  padding-bottom: 1rem; /* py-4 */
-  border-radius: 0.5rem; /* rounded-lg */
-  font-weight: 500; /* font-medium */
-  font-size: 0.875rem; /* text-sm */
-  transition-property: color, background-color, border-color, text-decoration-color, fill, stroke;
-  transition-duration: 150ms; /* transition-colors */
+  @apply px-6 py-4 rounded-lg font-medium text-sm transition-colors;
   background-color: var(--color-button-login-default);
   color: var(--color-button-textColor);
 }
