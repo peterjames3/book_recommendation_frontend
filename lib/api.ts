@@ -112,6 +112,16 @@ export const booksApi = {
     const response = await api.get<ApiResponse>('/books', { params });
     return response.data;
   },
+  searchEnhanced: async (query: string, params?: { 
+    limit?: number; 
+    includeDescriptions?: boolean;
+    offset?: number;
+  }) => {
+    const response = await api.get<ApiResponse>(`/books/search/enhanced`, {
+      params: { q: query, ...params }
+    });
+    return response.data;
+  },
   
   getBook: async (id: string) => {
     const response = await api.get<ApiResponse>(`/books/${id}`);
@@ -149,6 +159,17 @@ export const booksApi = {
     // Get book description from Open Library
   getBookDescription: async (id: string) => {
     const response = await api.get<ApiResponse>(`/books/${id}/description`);
+    return response.data;
+  },
+  // Search external books (Open Library integration)
+  searchExternalBooks: async (query: string, params?: { 
+    limit?: number; 
+    offset?: number;
+  }) => {
+    const response = await api.post<ApiResponse>('/search/external', {
+      query,
+      ...params,
+    });
     return response.data;
   },
 };

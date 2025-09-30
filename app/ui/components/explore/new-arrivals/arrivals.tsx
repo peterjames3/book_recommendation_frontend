@@ -31,8 +31,8 @@ export default function Arrivals() {
 
   return (
     <section className="mt-12 w-full bg-background">
-      <div className="py-12 w-full mx-auto max-w-full lg:max-w-[1240px] xl:max-w-[1440px]">
-        <h2 className="headline font-semibold mb-4">New Arrivals</h2>
+      <div className="py-8 w-full mx-auto max-w-full lg:max-w-[1240px] xl:max-w-[1440px]">
+        <h2 className="headline font-semibold mb-5">New Arrivals</h2>
         <BookGrid books={books} loading={isLoading} />
       </div>
     </section>

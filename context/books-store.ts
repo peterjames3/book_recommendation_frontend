@@ -113,6 +113,10 @@ interface BooksActions {
   loadNewReleases: (limit?: number) => Promise<void>;
   loadBook: (id: string) => Promise<void>;
   loadBooksByGenre: (genre: string, params?: Record<string, unknown>) => Promise<void>;
+   
+  // Enhanced search actions
+  searchEnhanced: (query: string, params?: Record<string, unknown>) => Promise<void>;
+    searchExternalBooks: (query: string, params?: Record<string, unknown>) => Promise<void>;
   
   // Search actions
   searchBooks: (query: string, params?: Record<string, unknown>) => Promise<void>;
@@ -268,6 +272,7 @@ export const useBooksStore = create<BooksStore>()((set) => ({
       toast.error(errorMessage);
     }
   },
+  
   // get book description
   getBookDescription: async (id: string): Promise<string> => {
   try {
@@ -281,6 +286,71 @@ export const useBooksStore = create<BooksStore>()((set) => ({
   } catch (error: unknown) {
     console.error('Failed to fetch book description:', error);
     return "No description available";
+  }
+},
+searchEnhanced: async (query: string, params = {}) => {
+  try {
+    set({ isSearching: true, searchError: null, searchQuery: query });
+
+    const response = await booksApi.searchEnhanced(query, params);
+
+    if (response.success && response.data) {
+      const books = response.data as Book[];
+      set({
+        searchResults: {
+          books: books,
+          totalCount: books.length,
+          page: 1,
+          limit: books.length,
+          hasMore: false,
+        },
+        isSearching: false,
+        searchError: null,
+      });
+    } else {
+      throw new Error(response.message || 'Enhanced search failed');
+    }
+  } catch (error: unknown) {
+    const errorMessage = ((error as AxiosError).response?.data as ErrorResponse)?.message || (error as AxiosError).message || 'Enhanced search failed';
+    set({
+      isSearching: false,
+      searchError: errorMessage,
+      searchResults: null,
+    });
+    toast.error(errorMessage);
+  }
+},
+
+searchExternalBooks: async (query: string, params = {}) => {
+  try {
+    set({ isSearching: true, searchError: null });
+
+    const response = await booksApi.searchExternalBooks(query, params);
+
+    if (response.success && response.data) {
+      const books = response.data as Book[];
+      set({
+        searchResults: {
+          books: books,
+          totalCount: books.length,
+          page: 1,
+          limit: books.length,
+          hasMore: false,
+        },
+        isSearching: false,
+        searchError: null,
+      });
+    } else {
+      throw new Error(response.message || 'External books search failed');
+    }
+  } catch (error: unknown) {
+    const errorMessage = ((error as AxiosError).response?.data as ErrorResponse)?.message || (error as AxiosError).message || 'External books search failed';
+    set({
+      isSearching: false,
+      searchError: errorMessage,
+      searchResults: null,
+    });
+    toast.error(errorMessage);
   }
 },
 
