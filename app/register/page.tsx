@@ -1,55 +1,42 @@
 // app/signup/page.tsx
 'use client';
 
-import {
-  MoveRight,
-  LockKeyhole,
-  Eye,
-  Mail,
-  EyeOff,
-  User,
-
-} from 'lucide-react'
-import { useState } from 'react';
+import { Mail,  User } from 'lucide-react'
+import { useFormik } from 'formik';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useAuthStore } from '@/context/auth-store';
-//import { toast } from 'react-hot-toast';
 import Image from 'next/image';
-
+import { validateRegister } from "@/lib/validation/registerValidation"
+import { InputField } from '@/app/ui/components/auth/input-fields'
+import { PasswordField } from "@/app/ui/components/auth/password-field";
 export default function SignupPage() {
-    const [ showPassword, setShowPassword]= useState(false);
-  const [formData, setFormData] = useState({
-    userName: '',
-    email: '',
-    password: '',
-  });
-  const [loading, setLoading] = useState(false);
+const { register, isLoading, clearError } = useAuthStore();
+ const router = useRouter();
 
-  const { register } = useAuthStore();
-  const router = useRouter();
+ const formik = useFormik({
+     initialValues: { firstName: '', lastName: '', email: "", password: "" },
+     validate: validateRegister,
+     onSubmit: async (values, { setSubmitting, setErrors }) => {
+       try {
+         clearError();
+         formik.resetForm()
+         await register(values);
+         router.push("/onboarding");
+       } catch (error: unknown) {
+         const errorMessage = (error as { message?: string })?.message || "Login failed";
+         if (errorMessage.toLowerCase().includes("invalid")) {
+           setErrors({ email: "Invalid email or password", password: "Invalid email or password" });
+         } else {
+           setErrors({ email: "Login failed", password: "Login failed" });
+         }
+       } finally {
+         setSubmitting(false);
+       }
+     },
+   });
+ 
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData(prev => ({
-      ...prev,
-      [e.target.name]: e.target.value
-    }));
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setLoading(true);
-
-    try {
-      await register(formData);
-      // Redirect to onboarding after successful registration
-      router.push('/onboarding');
-    } catch (error) {
-      // Error handling is done in the store
-    } finally {
-      setLoading(false);
-    }
-  };
 
   return (
     <div className="min-h-screen bg-accent2 flex items-center justify-center p-4">
@@ -89,93 +76,58 @@ export default function SignupPage() {
             </h2>
           </div>
 
-          <form onSubmit={handleSubmit} className="space-y-6">
-           
-              <div>
-            <label
-              className="mb-3 mt-5 block text-sm font-medium text-gray-700"
-              htmlFor="userName"
-            >
-              Username
-            </label>
-            <div className="relative">
-              <input
-                className="peer block w-full rounded-md border border-cardBg py-3 pl-10  outline placeholder:text-gray-500 focus:ring-2 focus:ring-primary focus:border-primary transition-colors"
-                id="userName"
-                type="userName"
-                name="userName"
-                placeholder="Enter your userName"
-                required
-              />
-              <User className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-primary peer-focus:text-gray-900" />
-            </div>
-          </div>
-
-          <div>
-            <label
-              className="mb-3 mt-5 block text-sm font-medium text-gray-700"
-              htmlFor="email"
-            >
-              Email
-            </label>
-            <div className="relative">
-              <input
-                className="peer block w-full rounded-md border border-cardBg py-3 pl-10  outline placeholder:text-gray-500 focus:ring-2 focus:ring-primary focus:border-primary transition-colors"
-                id="email"
-                type="email"
-                name="email"
-                placeholder="Enter your email address"
-                required
-              />
-              <Mail className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-primary peer-focus:text-gray-900" />
-            </div>
-          </div>
-
-        <div className="mt-4">
-            <label
-              className="mb-3 mt-5 block text-sm font-medium text-gray-700"
-              htmlFor="password"
-            >
-              Password
-            </label>
-            <div className="relative">
-              <input
-                className="peer block w-full rounded-md border border-cardBg py-3 pl-10  outline placeholder:text-gray-500 focus:ring-2 focus:ring-primary focus:border-primary"
-                id="password"
-                type={showPassword ? "text" : "password"}
-                name="password"
-                placeholder="Enter password"
-                required
-                minLength={6}
-              />
-              <LockKeyhole className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-primary peer-focus:text-gray-900" />
-              <button
-                type="button"
-                onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-primary focus:outline-none"
-                aria-label={showPassword ? "Hide password" : "Show password"}
-              >
-                {showPassword ? (
-                  <EyeOff className="h-[18px] w-[18px]" />
-                ) : (
-                  <Eye className="h-[18px] w-[18px]" />
-                )}
-              </button>
-            </div>
-          </div>
+          <form onSubmit={formik.handleSubmit} className="space-y-6">
+            <InputField
+              id='firstName'
+              label='firstName'
+              icon={User}
+              field={formik.getFieldProps('firstName')}
+              placeholder='John'
+              error={formik.errors.firstName}
+              touched={formik.touched.firstName}
+            />
+            <InputField
+              id='lastName'
+              label='lastName'
+              icon={User}
+              field={formik.getFieldProps('lastName')}
+              placeholder='Doe'
+              error={formik.errors.lastName}
+              touched={formik.touched.lastName}
+            />
+            <InputField
+              id="email"
+              label="Email"
+              type="email"
+              icon={Mail}
+              field={formik.getFieldProps("email")}
+              placeholder='johndoe@gmail.com'
+              error={formik.errors.email}
+              touched={formik.touched.email}
+            />
+            <PasswordField
+              id="password"
+              label="Password"
+              field={formik.getFieldProps("password")}
+              placeholder='Enter your password'
+              error={formik.errors.password}
+              touched={formik.touched.password}
+              disabled={isLoading}
+            />
 
             <button
               type="submit"
-              disabled={loading}
+              disabled={isLoading || !formik.isValid || formik.isSubmitting}
+              aria-disabled={isLoading}
               className="w-full bg-primary text-white py-3 px-4 rounded-lg hover:bg-button-hover focus:ring-2 focus:ring-button-active focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors font-semibold"
             >
-              {loading ? (
+              {isLoading ? (
                 <div className="flex items-center justify-center gap-2">
                   <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
                   Creating account...
                 </div>
               ) : (
-                "Let's Start"
+                "Sign Up"
               )}
             </button>
           </form>

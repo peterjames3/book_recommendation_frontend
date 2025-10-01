@@ -1,10 +1,12 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import { ToastContainer } from "react-toastify";
 import Navbar from "@/app/ui/components/navigation/Navbar";
 import Footer from "./ui/components/footer/footer";
 import ScrollToTopBtn from "./ui/scroll-to-top-btn";
 import ReactQueryProvider from "@/provider/react-query-provider";
+
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -98,6 +100,7 @@ export default function RootLayout({
           {children}
            <ScrollToTopBtn />
            <Footer /> 
+            <ToastContainer />
           
         </body>
         </ReactQueryProvider>

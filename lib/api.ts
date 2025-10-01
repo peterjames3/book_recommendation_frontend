@@ -11,6 +11,23 @@ export interface ApiResponse<T = unknown> {
   error?: string;
 }
 
+export interface User {
+  id: string;
+  email: string;
+  firstName: string;
+  lastName: string;
+  preferences?: {
+    favoriteGenres: string[];
+    preferredAuthors: string[];
+    readingGoals?: {
+      booksPerMonth?: number;
+      favoriteFormats?: ('physical' | 'ebook' | 'audiobook')[];
+    };
+  };
+  createdAt: string;
+  updatedAt: string;
+}
+
 // Create axios instance
 const api: AxiosInstance = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001/api',
@@ -63,33 +80,32 @@ api.interceptors.response.use(
   }
 );
 
-// Auth API
 export const authApi = {
   login: async (credentials: { email: string; password: string }) => {
-    const response = await api.post<ApiResponse>('/auth/login', credentials);
+    const response = await api.post<ApiResponse<{user: User, token: string}>>('/auth/login', credentials);
     return response.data;
   },
-  
-  register: async (userData: { 
-    email: string; 
-    password: string; 
-    firstName: string; 
-    lastName: string; 
+
+  register: async (userData: {
+    email: string;
+    password: string;
+    firstName: string;
+    lastName: string;
   }) => {
-    const response = await api.post<ApiResponse>('/auth/register', userData);
+    const response = await api.post<ApiResponse<{user: User, token: string}>>('/auth/register', userData);
     return response.data;
   },
-  
+
   getProfile: async () => {
-    const response = await api.get<ApiResponse>('/auth/me');
+    const response = await api.get<ApiResponse<User>>('/auth/me');
     return response.data;
   },
-  
+
   updatePreferences: async (preferences: Record<string, unknown>) => {
-    const response = await api.put<ApiResponse>('/auth/preferences', preferences);
+    const response = await api.put<ApiResponse<User>>('/auth/preferences', preferences);
     return response.data;
   },
-  
+
   logout: async () => {
     const response = await api.post<ApiResponse>('/auth/logout');
     return response.data;
