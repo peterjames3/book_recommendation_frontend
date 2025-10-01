@@ -1,6 +1,15 @@
 // app/signup/page.tsx
 'use client';
 
+import {
+  MoveRight,
+  LockKeyhole,
+  Eye,
+  Mail,
+  EyeOff,
+  User,
+
+} from 'lucide-react'
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
@@ -9,6 +18,7 @@ import { useAuthStore } from '@/context/auth-store';
 import Image from 'next/image';
 
 export default function SignupPage() {
+    const [ showPassword, setShowPassword]= useState(false);
   const [formData, setFormData] = useState({
     userName: '',
     email: '',
@@ -80,55 +90,79 @@ export default function SignupPage() {
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-6">
-            <div>
-              <label htmlFor="userName" className="block text-sm font-medium text-gray-700 mb-2">
-                Username
-              </label>
-              <input
-                id="userName"
-                name="userName"
-                type="text"
-                required
-                value={formData.userName}
-                onChange={handleChange}
-                placeholder="Enter your username"
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
-              />
-            </div>
-
            
-            <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
-                Email Address
-              </label>
+              <div>
+            <label
+              className="mb-3 mt-5 block text-sm font-medium text-gray-700"
+              htmlFor="userName"
+            >
+              Username
+            </label>
+            <div className="relative">
               <input
-                id="email"
-                name="email"
-                type="email"
+                className="peer block w-full rounded-md border border-cardBg py-3 pl-10  outline placeholder:text-gray-500 focus:ring-2 focus:ring-primary focus:border-primary transition-colors"
+                id="userName"
+                type="userName"
+                name="userName"
+                placeholder="Enter your userName"
                 required
-                value={formData.email}
-                onChange={handleChange}
-                placeholder="Enter your email"
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
               />
+              <User className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-primary peer-focus:text-gray-900" />
             </div>
+          </div>
 
-            <div>
-              <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-2">
-                Password
-              </label>
+          <div>
+            <label
+              className="mb-3 mt-5 block text-sm font-medium text-gray-700"
+              htmlFor="email"
+            >
+              Email
+            </label>
+            <div className="relative">
               <input
-                id="password"
-                name="password"
-                type="password"
+                className="peer block w-full rounded-md border border-cardBg py-3 pl-10  outline placeholder:text-gray-500 focus:ring-2 focus:ring-primary focus:border-primary transition-colors"
+                id="email"
+                type="email"
+                name="email"
+                placeholder="Enter your email address"
                 required
-                value={formData.password}
-                onChange={handleChange}
-                placeholder="Enter password"
-                minLength={6}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
               />
+              <Mail className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-primary peer-focus:text-gray-900" />
             </div>
+          </div>
+
+        <div className="mt-4">
+            <label
+              className="mb-3 mt-5 block text-sm font-medium text-gray-700"
+              htmlFor="password"
+            >
+              Password
+            </label>
+            <div className="relative">
+              <input
+                className="peer block w-full rounded-md border border-cardBg py-3 pl-10  outline placeholder:text-gray-500 focus:ring-2 focus:ring-primary focus:border-primary"
+                id="password"
+                type={showPassword ? "text" : "password"}
+                name="password"
+                placeholder="Enter password"
+                required
+                minLength={6}
+              />
+              <LockKeyhole className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-primary peer-focus:text-gray-900" />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-primary focus:outline-none"
+                aria-label={showPassword ? "Hide password" : "Show password"}
+              >
+                {showPassword ? (
+                  <EyeOff className="h-[18px] w-[18px]" />
+                ) : (
+                  <Eye className="h-[18px] w-[18px]" />
+                )}
+              </button>
+            </div>
+          </div>
 
             <button
               type="submit"

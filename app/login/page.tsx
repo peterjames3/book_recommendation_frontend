@@ -1,6 +1,15 @@
 // app/login/page.tsx
 'use client';
 
+import {
+  MoveRight,
+  LockKeyhole,
+  Eye,
+  Mail,
+  EyeOff,
+
+} from 'lucide-react'
+
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
@@ -9,6 +18,7 @@ import { useAuthStore } from '@/context/auth-store';
 import Image from 'next/image';
 
 export default function LoginPage() {
+  const [ showPassword, setShowPassword]= useState(false);
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -82,36 +92,58 @@ export default function LoginPage() {
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-6">
-          <div>
-            <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
-              Email Address
+          
+            <div>
+            <label
+              className="mb-3 mt-5 block text-sm font-medium text-gray-700"
+              htmlFor="email"
+            >
+              Email
             </label>
-            <input
-              id="email"
-              name="email"
-              type="email"
-              required
-              value={formData.email}
-              onChange={handleChange}
-              placeholder="Enter your email"
-              className="w-full px-4 py-3 border border-gray-400 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary transition-colors"
-            />
+            <div className="relative">
+              <input
+                className="peer block w-full rounded-md border border-cardBg py-3 pl-10  outline placeholder:text-gray-500 focus:ring-2 focus:ring-primary focus:border-primary transition-colors"
+                id="email"
+                type="email"
+                name="email"
+                placeholder="Enter your email address"
+                required
+              />
+              <Mail className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-primary peer-focus:text-gray-900" />
+            </div>
           </div>
 
-          <div>
-            <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-2">
+            <div className="mt-4">
+            <label
+              className="mb-3 mt-5 block text-sm font-medium text-gray-700"
+              htmlFor="password"
+            >
               Password
             </label>
-            <input
-              id="password"
-              name="password"
-              type="password"
-              required
-              value={formData.password}
-              onChange={handleChange}
-              placeholder="Enter password"
-              className="w-full px-4 py-3 border border-gray-400 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary transition-colors"
-            />
+            <div className="relative">
+              <input
+                className="peer block w-full rounded-md border border-cardBg py-3 pl-10  outline placeholder:text-gray-500 focus:ring-2 focus:ring-primary focus:border-primary"
+                id="password"
+                type={showPassword ? "text" : "password"}
+                name="password"
+                placeholder="Enter password"
+                required
+                minLength={6}
+              />
+              <LockKeyhole className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-primary peer-focus:text-gray-900" />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-primary focus:outline-none"
+                aria-label={showPassword ? "Hide password" : "Show password"}
+              >
+                {showPassword ? (
+                  <EyeOff className="h-[18px] w-[18px]" />
+                ) : (
+                  <Eye className="h-[18px] w-[18px]" />
+                )}
+              </button>
+            </div>
           </div>
 
           <button
@@ -125,7 +157,7 @@ export default function LoginPage() {
                 Signing in...
               </div>
             ) : (
-              "Let's Start"
+              "Login"
             )}
           </button>
         </form>
