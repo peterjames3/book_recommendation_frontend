@@ -71,16 +71,17 @@ export default function Navbar() {
         </div>
         {/*  Buttons */}
         <div className="lg:flex  hidden gap-5">
-          <button
+          <Link
+          href='/login'
             id="login-btn"
-            // onClick={() => dispatch({ type: "SHOW_HELP" })}
+            
             type="button"
-            className="bg-primary px-8 text-text hover:text-secondary p-text border border-primary py-2 rounded-sm hover:cursor-pointer hover:bg-button-hover hover:border-button-hover focus:outline-2 focus:outline-offset-2 focus:outline-button-active active:bg-button-active "
+            className="bg-primary  flex items-center justify-center px-8 text-text hover:text-secondary p-text border border-primary py-2 rounded-sm hover:cursor-pointer hover:bg-button-hover hover:border-button-hover focus:outline-2 focus:outline-offset-2 focus:outline-button-active active:bg-button-active "
             aria-label='Login'
             aria-pressed='false'
           >
             Login
-          </button>
+          </Link>
           
           <button
             id="register-btn"
