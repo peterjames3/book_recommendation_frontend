@@ -11,7 +11,7 @@ export default  function Page() {
 
   return (
     <div className="flex h-screen flex-col md:flex-row md:overflow-hidden bg-background w-full mx-auto max-w-full lg:max-w-[1240px] xl:max-w-[1440px]">
-      <div className="w-full flex-none md:w-[20rem]">
+      <div className="w-full min-h-screen overflow-y-auto flex-none md:w-[20rem]">
         <SideNav />
       </div>
 
