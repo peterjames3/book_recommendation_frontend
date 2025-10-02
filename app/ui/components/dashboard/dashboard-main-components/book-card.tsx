@@ -9,7 +9,7 @@ interface BookCardProps {
 
 export const BookCard: React.FC<BookCardProps> = ({ book }) => {
   return (
-    <Link href={`/books/${book.id}`} className="group block">
+    <Link href={`/dashboard/${book.id}`} className="group block">
       <div className="bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow p-4 h-full">
         <div className="aspect-[3/4] bg-gray-200 rounded mb-3 overflow-hidden">
           {book.imageUrl ? (
