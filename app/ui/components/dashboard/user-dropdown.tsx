@@ -1,13 +1,20 @@
 import Link from "next/link";
-import { Settings } from "lucide-react";
+import { User, LogOut } from "lucide-react";
+import { useAuthStore } from "@/context/auth-store";
 //import Logout from "@/app/ui/dashboard/logout";
+
 export default function UserDropdown() {
+  const { logout } = useAuthStore();
   const links = [
-    { name: "Settings", href: "/dashboard/settings", Icon: Settings },
+    { name: "Profile", href: "/dashboard/profile", Icon: User },
   ];
 
+  const handleLogout = () =>{
+    logout();
+  }
+
   return (
-    <div className="absolute right-0 top-16 w-[190px] bg-cardBg border-b border-notification-hovered rounded-lg shadow-lg">
+    <div className="absolute right-0 top-20 w-[190px] bg-accent border-b border-button-default rounded-lg shadow-lg">
       <ul className="flex flex-col ">
         {links.map((link) => (
           <Link
@@ -15,14 +22,25 @@ export default function UserDropdown() {
             href={link.href}
             className="flex items-center gap-2 w-full p-4 hover:bg-notification-hovered rounded-t-lg "
           >
-            <link.Icon className="text-primary" />
-            <span className="text-label text-primary font-medium">
+            <link.Icon className="text-text" />
+            <span className="text-label text-text font-medium">
               {link.name}
             </span>
           </Link>
         ))}
-        <div className="border-t px-4 text-error border-notification-hovered hover:bg-notification-hovered flex gap-2 items-center   rounded-b-lg">
+        <div className="border-t px-2 text-error border-notification-hovered hover:bg-notification-hovered flex gap-2 items-center   rounded-b-lg">
           {/* <Logout /> */}
+          <button type="button" 
+          onClick={handleLogout}
+          aria-label="sign out button"
+            className="flex w-full hover:cursor-pointer items-center gap-3 p-3 text-sm font-medium text-red-700  hover:text-red-800 transition-colors"
+      >
+            <LogOut className="" />
+            <span >
+              Sign Out
+            </span>
+
+          </button>
         </div>
       </ul>
     </div>

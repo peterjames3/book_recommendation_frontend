@@ -25,7 +25,7 @@ export default function UserProfileSection({ user, onLogout }: UserProfileSectio
       {/* Logout Button */}
       <button
         onClick={onLogout}
-        className="flex w-full items-center gap-3 rounded-lg bg-red-50 p-3 text-sm font-medium text-red-700 hover:bg-red-100 hover:text-red-800 transition-colors"
+        className="flex w-full hover:cursor-pointer items-center gap-3 rounded-lg bg-red-50 p-3 text-sm font-medium text-red-700 hover:bg-red-100 hover:text-red-800 transition-colors"
       >
         <LogOut size={20} />
         <span>Sign Out</span>

@@ -12,7 +12,7 @@ export default function UserDetails({ user }: { user: User | null }) {
     //Toggle dropdown visibility
     const toggleDropdown = () => setIsOpen(!isOpen);
     return (
-        <div className="flex items-center gap-3 hover:bg-accent2 rounded-lg transition-all duration-200 ease-in-out p-2">
+        <div className=" relative flex items-center gap-3 hover:bg-accent2 rounded-lg transition-all duration-200 ease-in-out p-2">
             {user?.firstName ? (
                 <div className="flex items-center gap-2">
                     <Image
