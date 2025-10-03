@@ -4,16 +4,28 @@ import { useRouter } from 'next/navigation';
 import RelatedBookSkeleton from '@/app/ui/components/skelton/relatedbook-skeleton';
 import { Book } from '@/context/books-store';
 
+interface RelatedBooksProp {
+  books: Book[] | undefined;
+  isLoading: boolean;
+  isError: boolean;
+  route?: 'dashboard' | 'explore';
+}
+
 export default function RelatedBooks({
   books,
   isLoading,
   isError,
-}: {
-  books: Book[] | undefined;
-  isLoading: boolean;
-  isError: boolean;
-}) {
+  route = 'explore'
+}: RelatedBooksProp) {
   const router = useRouter();
+
+  const handleBookClick = (bookId: string) =>{
+    if(route === 'dashboard'){
+      router.push(`/dashboard/${bookId}`)
+    } else {
+      router.push(`/explore/${bookId}`)
+    }
+  }
 
   return (
     <section className="w-full md:w-1/3 rounded-sm bg-accent3 p-3">
@@ -31,7 +43,7 @@ export default function RelatedBooks({
           {books.map((relBook) => (
             <article
               key={relBook.id}
-              onClick={() => router.push(`/explore/${relBook.id}`)}
+              onClick={() => handleBookClick(relBook.id)}
               className="flex items-center gap-3 hover:cursor-pointer"
             >
               <Image

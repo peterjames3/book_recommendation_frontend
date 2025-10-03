@@ -1,3 +1,4 @@
+// app/dashboard/books/[id]/page.tsx (or your book page)
 'use client';
 import { use } from 'react';
 import Link from 'next/link';
@@ -13,7 +14,7 @@ export default function BookPage({ params }: { params: Promise<{ id: string }> }
   const { id } = use(params);
 
   const { data: book, isError, isLoading, error } = useBook(id);
-  const { data: bookDescription, refetch: refetchDescription } = useBookDescription(id, false);
+  const { data: bookDescription, refetch: refetchDescription,  } = useBookDescription(id, false);
   const { data: relatedBooks, isLoading: isRelatedLoading, isError: isRelatedError } = useRelatedBooks(id, !!book);
 
   if (isLoading) return <Loading />;
@@ -23,6 +24,11 @@ export default function BookPage({ params }: { params: Promise<{ id: string }> }
   const categories = Object.values(book.categories || {}) as string[];
   const needsDescription = book && (!book.description || book.description === 'No description available');
   const displayDescription = bookDescription || book?.description || 'No description available';
+
+  // Handle the refetch with proper async/await
+  const handleFetchDescription = async () => {
+    await refetchDescription();
+  };
 
   return (
     <div className="mt-[10rem] w-full min-h-screen">
@@ -82,12 +88,12 @@ export default function BookPage({ params }: { params: Promise<{ id: string }> }
           <BookSummary
             description={displayDescription}
             needsDescription={needsDescription}
-            onFetchDescription={() => refetchDescription()}
+            onFetchDescription={handleFetchDescription}
           />
         </section>
 
         {/* Related books */}
-        <RelatedBooks books={relatedBooks} isLoading={isRelatedLoading} isError={isRelatedError} />
+        <RelatedBooks books={relatedBooks} isLoading={isRelatedLoading} isError={isRelatedError} route='dashboard' />
       </div>
     </div>
   );

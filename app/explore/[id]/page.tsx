@@ -1,3 +1,4 @@
+// app/dashboard/books/[id]/page.tsx (or your book page)
 'use client';
 import { use } from 'react';
 import Link from 'next/link';
@@ -13,7 +14,7 @@ export default function BookPage({ params }: { params: Promise<{ id: string }> }
   const { id } = use(params);
 
   const { data: book, isError, isLoading, error } = useBook(id);
-  const { data: bookDescription, refetch: refetchDescription } = useBookDescription(id, false);
+  const { data: bookDescription, refetch: refetchDescription, } = useBookDescription(id, false);
   const { data: relatedBooks, isLoading: isRelatedLoading, isError: isRelatedError } = useRelatedBooks(id, !!book);
 
   if (isLoading) return <Loading />;
@@ -24,11 +25,16 @@ export default function BookPage({ params }: { params: Promise<{ id: string }> }
   const needsDescription = book && (!book.description || book.description === 'No description available');
   const displayDescription = bookDescription || book?.description || 'No description available';
 
+  // Handle the refetch with proper async/await
+  const handleFetchDescription = async () => {
+    await refetchDescription();
+  };
+
   return (
     <div className="mt-[10rem] w-full min-h-screen">
       <div className="w-full mx-auto max-w-full lg:max-w-[1240px] xl:max-w-[1440px]">
         <ul className="mb-3 flex items-center gap-2 text-xl text-text">
-          <li>Explore</li>
+          <li>Dashboard</li>
           <span>/</span>
           <li>{categories[0] || 'categories unknown'}</li>
           <span>/</span>
@@ -82,12 +88,12 @@ export default function BookPage({ params }: { params: Promise<{ id: string }> }
           <BookSummary
             description={displayDescription}
             needsDescription={needsDescription}
-            onFetchDescription={() => refetchDescription()}
+            onFetchDescription={handleFetchDescription}
           />
         </section>
 
         {/* Related books */}
-        <RelatedBooks books={relatedBooks} isLoading={isRelatedLoading} isError={isRelatedError} />
+        <RelatedBooks books={relatedBooks} isLoading={isRelatedLoading} isError={isRelatedError} route='explore' />
       </div>
     </div>
   );
