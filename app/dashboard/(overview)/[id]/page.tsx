@@ -9,6 +9,7 @@ import { useBook, useBookDescription } from '@/hooks/useBook';
 import { useRelatedBooks } from '@/hooks/useRelatedBooks';
 import BookSummary from '@/app/ui/book-summary';
 import RelatedBooks from '@/app/ui/related-books';
+import AddToCartButton from '@/app/ui/components/cart/add-to-cart-btn';  
 
 export default function BookPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params);
@@ -90,6 +91,17 @@ export default function BookPage({ params }: { params: Promise<{ id: string }> }
             needsDescription={needsDescription}
             onFetchDescription={handleFetchDescription}
           />
+             {/* Price and Add to Cart Button */}
+              <div className="flex items-center gap-4 mt-4">
+                <span className="text-2xl font-bold text-green-600">
+                  ${book.price ? book.price : 'N/A'}
+                </span>
+                <AddToCartButton 
+                  book={book} 
+                  size="lg"
+                  variant="primary"
+                />
+              </div>
         </section>
 
         {/* Related books */}

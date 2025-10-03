@@ -6,6 +6,7 @@ import Mobile from "@/app/ui/components/navigation/Mobile";
 import { MenuItems } from "@/lib/dashboard-menu-items";
 import { useAuthStore } from "@/context/auth-store";
 import UserDetails from "./user-details";
+import CartIcon from "../cart/cart-icon";
 
 // interface UserNavbarProps {
 //   isScrolled: boolean;
@@ -54,7 +55,8 @@ export default function UserNavbar() {
       </div>
 
       {/* User Profile */}
-      <div className="hidden lg:flex gap-5">
+      <div className="hidden lg:flex gap-5 lg:items-center">
+        <CartIcon />
         <UserDetails user={user} />
       </div>
 
