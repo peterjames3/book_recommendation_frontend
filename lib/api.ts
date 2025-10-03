@@ -2,6 +2,7 @@ import axios, { AxiosInstance, AxiosResponse } from 'axios';
 import { toast } from 'react-hot-toast';
 import Cookies from 'js-cookie';
 import { Book } from '@/context/books-store';
+import { Cart } from '@/context/cart-store';
 
 // Types
 export interface ApiResponse<T = unknown> {
@@ -276,7 +277,7 @@ export const recommendationsApi = {
 // Cart API
 export const cartApi = {
   getCart: async () => {
-    const response = await api.get<ApiResponse>('/cart');
+    const response = await api.get<ApiResponse<Cart>>('/cart');
     return response.data;
   },
   
@@ -301,7 +302,7 @@ export const cartApi = {
   },
   
   getCartCount: async () => {
-    const response = await api.get<ApiResponse>('/cart/count');
+    const response = await api.get<ApiResponse<{count: number}>>('/cart/count');
     return response.data;
   },
 };

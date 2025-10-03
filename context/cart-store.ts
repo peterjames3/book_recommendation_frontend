@@ -2,6 +2,7 @@ import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { cartApi } from '@/lib/api';
 import { toast } from 'react-hot-toast';
+import { AxiosError } from 'axios';
 
 export interface Book {
   id: string;
@@ -66,17 +67,31 @@ export const useCartStore = create<CartStore>()(
           const response = await cartApi.getCart();
           
           if (response.success && response.data) {
+            const cartData = response.data as Partial<Cart>;
             set({
-              cart: response.data,
+              cart: {
+                items: cartData.items || [],
+                totalItems: cartData.totalItems || getCartItemCount({
+                  items: cartData.items || [],
+                  totalItems: 0,
+                  totalPrice: 0
+                }),
+                totalPrice: cartData.totalPrice || getCartTotal({
+                  items: cartData.items || [],
+                  totalItems: 0,
+                  totalPrice: 0
+                }),
+              },
               isLoading: false,
               error: null,
             });
           } else {
             throw new Error(response.message || 'Failed to load cart');
           }
-        } catch (error: any) {
+        } catch (error: unknown) {
+          const axiosError = error as AxiosError<{ message?: string }>;
           // If user is not authenticated, just set empty cart
-          if (error.response?.status === 401) {
+          if (axiosError.response?.status === 401) {
             set({
               cart: {
                 items: [],
@@ -87,7 +102,7 @@ export const useCartStore = create<CartStore>()(
               error: null,
             });
           } else {
-            const errorMessage = error.response?.data?.message || error.message || 'Failed to load cart';
+            const errorMessage = axiosError.response?.data?.message || axiosError.message || 'Failed to load cart';
             set({
               isLoading: false,
               error: errorMessage,
@@ -109,14 +124,15 @@ export const useCartStore = create<CartStore>()(
           } else {
             throw new Error(response.message || 'Failed to add book to cart');
           }
-        } catch (error: any) {
-          const errorMessage = error.response?.data?.message || error.message || 'Failed to add book to cart';
+        } catch (error: unknown) {
+          const axiosError = error as AxiosError<{ message?: string }>;
+          const errorMessage = axiosError.response?.data?.message || axiosError.message || 'Failed to add book to cart';
           set({
             isLoading: false,
             error: errorMessage,
           });
           toast.error(errorMessage);
-          throw error;
+          throw axiosError;
         }
       },
 
@@ -133,14 +149,15 @@ export const useCartStore = create<CartStore>()(
           } else {
             throw new Error(response.message || 'Failed to update cart item');
           }
-        } catch (error: any) {
-          const errorMessage = error.response?.data?.message || error.message || 'Failed to update cart item';
+        } catch (error: unknown) {
+          const axiosError = error as AxiosError<{ message?: string }>;
+          const errorMessage = axiosError.response?.data?.message || axiosError.message || 'Failed to update cart item';
           set({
             isLoading: false,
             error: errorMessage,
           });
           toast.error(errorMessage);
-          throw error;
+          throw axiosError;
         }
       },
 
@@ -157,14 +174,15 @@ export const useCartStore = create<CartStore>()(
           } else {
             throw new Error(response.message || 'Failed to remove book from cart');
           }
-        } catch (error: any) {
-          const errorMessage = error.response?.data?.message || error.message || 'Failed to remove book from cart';
+        } catch (error: unknown) {
+          const axiosError = error as AxiosError<{ message?: string }>;
+          const errorMessage = axiosError.response?.data?.message || axiosError.message || 'Failed to remove book from cart';
           set({
             isLoading: false,
             error: errorMessage,
           });
           toast.error(errorMessage);
-          throw error;
+          throw axiosError;
         }
       },
 
@@ -188,14 +206,15 @@ export const useCartStore = create<CartStore>()(
           } else {
             throw new Error(response.message || 'Failed to clear cart');
           }
-        } catch (error: any) {
-          const errorMessage = error.response?.data?.message || error.message || 'Failed to clear cart';
+        } catch (error: unknown) {
+          const axiosError = error as AxiosError<{ message?: string }>;
+          const errorMessage = axiosError.response?.data?.message || axiosError.message || 'Failed to clear cart';
           set({
             isLoading: false,
             error: errorMessage,
           });
           toast.error(errorMessage);
-          throw error;
+          throw axiosError;
         }
       },
 
@@ -208,13 +227,14 @@ export const useCartStore = create<CartStore>()(
             set((state) => ({
               cart: {
                 ...state.cart,
-                totalItems: response.data.count,
+                totalItems: response.data!.count,
               },
             }));
           }
-        } catch (error: any) {
+        } catch (error: unknown) {
+          const axiosError = error as AxiosError<{ message?: string }>;
           // Silently fail for cart count - not critical
-          console.error('Failed to get cart count:', error);
+          console.error('Failed to get cart count:', axiosError);
         }
       },
 
