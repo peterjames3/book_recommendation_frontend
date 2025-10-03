@@ -4,7 +4,6 @@ import Cookies from 'js-cookie';
 import { AxiosError } from 'axios';
 import { authApi, User } from '@/lib/api';
 
-
 interface AuthState {
   user: User | null;
   token: string | null;
@@ -26,6 +25,9 @@ interface AuthActions {
   updatePreferences: (preferences: Record<string, unknown>) => Promise<void>;
   clearError: () => void;
   setLoading: (loading: boolean) => void;
+  // ADDED: Profile update actions
+  updateProfile: (profileData: { firstName?: string; lastName?: string; email?: string }) => Promise<void>;
+  updateName: (firstName: string, lastName: string) => Promise<void>;
 }
 
 type AuthStore = AuthState & AuthActions;
@@ -307,6 +309,65 @@ login: async (credentials) => {
 
       setLoading: (loading: boolean) => {
         set({ isLoading: loading });
+      },
+
+      // ADDED: Profile update methods
+      updateProfile: async (profileData) => {
+        try {
+          set({ isLoading: true, error: null });
+          
+          const response = await authApi.updateProfile(profileData);
+          
+          if (response.success && response.data) {
+            set({
+              user: response.data,
+              isLoading: false,
+              error: null,
+            });
+            
+            toastUtil.success('Profile updated successfully!');
+          } else {
+            throw new Error(response.message || 'Failed to update profile');
+          }
+        } catch (error: unknown) {
+          const axiosError = error as AxiosError;
+          const errorMessage = (axiosError.response?.data as { message?: string })?.message || axiosError.message || 'Failed to update profile';
+          set({
+            isLoading: false,
+            error: errorMessage,
+          });
+          toastUtil.error(errorMessage);
+          throw error;
+        }
+      },
+
+      updateName: async (firstName: string, lastName: string) => {
+        try {
+          set({ isLoading: true, error: null });
+
+          const response = await authApi.updateProfile({ firstName, lastName });
+
+          if (response.success && response.data) {
+            set({
+              user: response.data,
+              isLoading: false,
+              error: null,
+            });
+
+            toastUtil.success('Name updated successfully!');
+          } else {
+            throw new Error(response.message || 'Failed to update name');
+          }
+        } catch (error: unknown) {
+          const axiosError = error as AxiosError;
+          const errorMessage = (axiosError.response?.data as { message?: string })?.message || axiosError.message || 'Failed to update name';
+          set({
+            isLoading: false,
+            error: errorMessage,
+          });
+          toastUtil.error(errorMessage);
+          throw error;
+        }
       },
     }),
     {

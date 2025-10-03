@@ -14,5 +14,10 @@ export const MenuItems = [
         href: "/explore",
 
     },
+       {
+        name: "Profile",
+        href: "/dashboard/profile",
+
+    },
 
 ];

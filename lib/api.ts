@@ -110,6 +110,15 @@ export const authApi = {
     const response = await api.post<ApiResponse>('/auth/logout');
     return response.data;
   },
+  
+    updateProfile: async (profileData: {
+    firstName?: string;
+    lastName?: string;
+    email?: string;
+  }) => {
+    const response = await api.put<ApiResponse<User>>('/auth/profile', profileData);
+    return response.data;
+  },
 };
 
 // Books API
