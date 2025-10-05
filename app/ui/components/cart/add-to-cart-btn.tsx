@@ -25,7 +25,7 @@ export default function AddToCartButton({
     setIsAddingToCart(true);
     try {
       await addToCart(book.id);
-    } catch (error) {
+    } catch {
       // Error is already handled in the store
     } finally {
       setIsAddingToCart(false);

@@ -313,14 +313,16 @@ export const ordersApi = {
     shippingAddress: {
       street: string;
       city: string;
-      state: string;
+      town: string;
       zipCode: string;
       country: string;
     };
     paymentMethod: string;
     notes?: string;
+    customerEmail: string;
+    customerPhone: string;
   }) => {
-    const response = await api.post<ApiResponse>('/orders/create', orderData);
+    const response = await api.post<ApiResponse<{orderId: string}>>('/orders/create', orderData);
     return response.data;
   },
   

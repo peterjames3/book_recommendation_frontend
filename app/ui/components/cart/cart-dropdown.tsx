@@ -31,7 +31,7 @@ export default function CartDropdown({ onClose }: CartDropdownProps) {
           <h3 className="text-lg font-semibold">Shopping Cart</h3>
           <button
             onClick={onClose}
-            className="text-gray-400 hover:text-gray-600 transition-colors"
+            className="text-gray-400 hover:text-gray-600 transition-colors hover:cursor-pointer"
             aria-label="Close cart"
           >
             <X className="h-5 w-5" />
@@ -125,9 +125,9 @@ export default function CartDropdown({ onClose }: CartDropdownProps) {
                   Clear Cart
                 </button>
                 <Link
-                  href="/checkout"
+                  href="/dashboard/checkout"
                   onClick={onClose}
-                  className="flex-1 px-3 py-2 text-sm bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors text-center"
+                  className="flex-1 px-3 py-2 text-sm bg-primary text-white rounded hover:bg-button-hover transition-colors text-center"
                 >
                   Checkout
                 </Link>
