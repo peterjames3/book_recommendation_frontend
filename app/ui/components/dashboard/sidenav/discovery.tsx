@@ -20,7 +20,7 @@ export default function DiscoverySection({ discoveryGenres = DISCOVERY_GENRES }:
           <Link
             key={genre}
             href={`/books?genre=${encodeURIComponent(genre)}`}
-            className="block p-2 rounded-lg bg-white hover:bg-primary hover:text-white transition-colors text-sm text-normalText hover:text-white"
+            className="block p-2 rounded-lg bg-white hover:bg-primary hover:text-white transition-colors text-sm text-normalText "
           >
             {genre}
           </Link>

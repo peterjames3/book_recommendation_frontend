@@ -12,34 +12,64 @@ import Discovery from "./sidenav/discovery";
 import UserProfile from "./sidenav/user-profile";
 import { SideNavProps } from "./sidenav/types";
 
+
 export default function SideNav({}: SideNavProps) {
   const { user, logout } = useAuthStore();
-  const {  loadGenres, searchEnhanced } = useBooksStore();
+  const { 
+    loadGenres, 
+    searchBooks,
+    searchResults, 
+    isSearching,
+    searchError 
+  } = useBooksStore();
   
   // Search state
   const [searchQuery, setSearchQuery] = useState("");
   const [searchType, setSearchType] = useState("all");
-  const [isLoading, setIsLoading] = useState(false);
   const [showAdvanced, setShowAdvanced] = useState(false);
 
   useEffect(() => {
     loadGenres();
   }, [loadGenres]);
 
+  // Add useEffect to monitor search results changes
+  useEffect(() => {
+    if (searchResults) {
+      console.log('📚 Search results updated:', searchResults);
+      console.log(`🎉 Found ${searchResults.books.length} books using natural language search`);
+    }
+  }, [searchResults]);
+
+  // Add useEffect to monitor search errors
+  useEffect(() => {
+    if (searchError) {
+      console.error('❌ Search error occurred:', searchError);
+    }
+  }, [searchError]);
+
   const handleSearch = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!searchQuery.trim()) return;
+    console.log('🔍 Natural language search initiated:', { searchQuery, searchType });
     
-    setIsLoading(true);
+    if (!searchQuery.trim()) {
+      console.log('❌ Search query is empty');
+      return;
+    }
+    
     try {
-      await searchEnhanced(searchQuery, {
+      console.log('📡 Calling searchBooks (natural language search)...');
+      
+      // Use searchBooks for natural language queries
+      await searchBooks(searchQuery, {
         searchType: searchType === "all" ? undefined : searchType,
         includeDescriptions: true
       });
+      
+      // Don't check searchResults here - it might not be updated yet
+      console.log('✅ Natural language search request completed');
+      
     } catch (error) {
-      console.error('Search failed:', error);
-    } finally {
-      setIsLoading(false);
+      console.error('💥 Search failed:', error);
     }
   };
 
@@ -62,13 +92,13 @@ export default function SideNav({}: SideNavProps) {
         </div>
       </Link>
 
-      {/* Search Section */}
+      {/* Search Section - Now using natural language search */}
       <Search
         searchQuery={searchQuery}
         setSearchQuery={setSearchQuery}
         searchType={searchType}
         setSearchType={setSearchType}
-        isLoading={isLoading}
+        isLoading={isSearching}
         onSearch={handleSearch}
         showAdvanced={showAdvanced}
         setShowAdvanced={setShowAdvanced}

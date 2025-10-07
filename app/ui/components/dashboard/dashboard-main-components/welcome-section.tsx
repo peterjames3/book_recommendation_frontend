@@ -12,7 +12,7 @@ export const WelcomeSection: React.FC<WelcomeSectionProps> = ({ user }) => {
     <div className="mb-8 flex items-center justify-between">
       <section>
             <h1 className="text-3xl font-bold text-text mb-2">
-        Welcome back, {user?.firstName || 'Reader'}!
+        Welcome {user?.firstName || 'Reader'}!
       </h1>
       <p className="text-normalText text-lg">
         Continue your reading journey with personalized recommendations.

@@ -1,4 +1,3 @@
-// app/dashboard/page.tsx
 'use client';
 
 import { useAuthStore } from '@/context/auth-store';
@@ -10,8 +9,10 @@ import { GenreSection } from './dashboard-main-components/genre-section';
 import { OnboardingPrompt } from './dashboard-main-components/onboardingPrompt';
 import { ErrorState } from './dashboard-main-components/error-state';
 
+import { useBooksStore } from '@/context/books-store';
 export default function DashboardPage() {
   const { user } = useAuthStore();
+  const { searchResults, isSearching, searchQuery } = useBooksStore();
   const {
     personalizedRecommendations,
     genreBooks,
@@ -21,8 +22,8 @@ export default function DashboardPage() {
     error,
   } = useDashboardData();
 
-  // Extract books from recommendations
   const recommendedBooks = personalizedRecommendations.map(rec => rec.book);
+  const showSearchResults = searchResults && searchQuery.trim().length > 0;
 
   if (hasError) {
     return (
@@ -43,10 +44,19 @@ export default function DashboardPage() {
       <div className="max-w-7xl mx-auto mt-20">
         <WelcomeSection user={user} />
 
-        {/* Display user's favorite genres */}
+        {/* Search Results - Always show at top if available */}
+        {showSearchResults && (
+          <BookSection
+            title={`Search Results for "${searchQuery}"`}
+            books={searchResults?.books || []}
+            isLoading={isSearching}
+            emptyMessage="No books found for your search."
+          />
+        )}
+
+        {/* Regular content shows below search results */}
         {userGenres.length > 0 && <GenreTags genres={userGenres} />}
 
-        {/* Personalized Recommendations */}
         <BookSection
           title="Recommended For You"
           books={recommendedBooks}
@@ -54,7 +64,6 @@ export default function DashboardPage() {
           emptyMessage="No recommendations yet. Start exploring books!"
         />
 
-        {/* Books by Favorite Genres */}
         {userGenres.map((genre) => (
           <GenreSection
             key={genre}
@@ -64,7 +73,6 @@ export default function DashboardPage() {
           />
         ))}
 
-        {/* Onboarding Prompt for new users */}
         {userGenres.length === 0 && !isLoading && <OnboardingPrompt />}
       </div>
     </div>
